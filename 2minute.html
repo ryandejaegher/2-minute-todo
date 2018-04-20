@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>2 Minute Todo</title>
+    <style>
+        html {
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+
+        *,
+        *:before,
+        *:after {
+            -webkit-box-sizing: inherit;
+            -moz-box-sizing: inherit;
+            box-sizing: inherit;
+        }
+
+        body {
+            display: grid;
+            grid-template-columns: 1fr;
+            justify-items: center;
+            justify-content: center;
+            justify-self: center;
+            min-height: 100vh;
+            align-content: center;
+            font-family: 'Helvetica Neue';
+            background-color: #ffffff;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%2324d7e8' fill-opacity='0.1'%3E%3Cpath d='M0 38.59l2.83-2.83 1.41 1.41L1.41 40H0v-1.41zM0 1.4l2.83 2.83 1.41-1.41L1.41 0H0v1.41zM38.59 40l-2.83-2.83 1.41-1.41L40 38.59V40h-1.41zM40 1.41l-2.83 2.83-1.41-1.41L38.59 0H40v1.41zM20 18.6l2.83-2.83 1.41 1.41L21.41 20l2.83 2.83-1.41 1.41L20 21.41l-2.83 2.83-1.41-1.41L18.59 20l-2.83-2.83 1.41-1.41L20 18.59z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            color: #011627;
+            margin: 0;
+        }
+
+        input {
+            width: 75vw;
+            padding: 20px 10px;
+            font-size: 16px;
+            color: grey;
+            border: 2px solid lightgrey;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        input:focus {
+            color: black;
+        }
+
+        button {
+            color: #FDFFFC;
+            padding: 20px 40px;
+            width: 100%;
+            border: none;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 10px;
+        }
+
+        #start {
+            background-color: #2EC4B6;
+            box-shadow: 0 5px 0px grey;
+            /* border-bottom: 4px inset grey; */
+            position: relative;
+        }
+
+        #start:active {
+            box-shadow: none;
+            top: 4px;
+            background-color: rgb(49, 173, 161);
+        }
+
+        #stop {
+            background-color: #C44536;
+        }
+
+        h1{
+            font-size: 48px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1 class='test'>2 Minute Todo</h1>
+    <h1 class="display__time-left">2:00</h1>
+    <h2 id="showTodo"></h2>
+    <input type="text" placeholder="What will you do in 2 minutes?">
+    <div>
+        <button id="start">Start</button>
+        <!-- <button id="stop">Stop</button> -->
+    </div>
+    <audio id="audio" preload="auto" src="tap-mellow.aif"></audio>
+
+    <script>
+        let countdown;
+        const timerDisplay = document.querySelector('.display__time-left');
+
+        function timer(seconds) {
+            clearInterval(countdown);
+            // var todoText = document.querySelector('input');
+            // todoText.value = 'New todo'
+            const now = Date.now();
+            const then = now + seconds * 1000;
+            displayTimeLeft(seconds);
+            console.log({
+                now,
+                then
+            });
+            countdown = setInterval(() => {
+                const secondsLeft = Math.round((then - Date.now()) / 1000);
+                if (secondsLeft <= 0) {
+                    clearInterval(countdown);
+                }
+                displayTimeLeft(secondsLeft);
+            }, 1000);
+        }
+
+        function displayTimeLeft(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            const remainderSeconds = seconds % 60;
+            const display = `${minutes}:${remainderSeconds < 10 ? '0': ''}${remainderSeconds}`;
+            timerDisplay.textContent = display;
+        }
+
+        function startTodo() {
+            var todoText = document.querySelector('input');
+            var showTodo = document.querySelector('#showTodo');
+            showTodo.textContent = todoText.value;
+            todoText.value = '';
+            return todoText.value
+        }
+
+        document.addEventListener('click', function (e) {
+            var audio = document.querySelector('audio');
+            if (e.target.textContent === 'Start') {
+                audio.play();
+                startTodo()
+                timer(120);
+
+            } else {
+                return;
+            }
+        })
+
+        // document.addEventListener('click', function(e) {
+        //     var todoText = document.querySelector('input');
+        //     if(e.target.tagName === 'INPUT') {
+        //         todoText.value = '';
+        //     }
+        // })
+
+        // After the timer finishes the input box should reset
+        //When timer is running, start button should turn Stop/Pause
+        //When the todo text is added the page other elements shouldn't change
+        //The buttons should 
+        //When timer runs out, the input box should change to 'what will you do in 2 minutes?'
+        //When the timer runs out a sound should Play
+        //When the timer starts a sound should Play
+        //When timer is done it should announce "DONE"
+        //There should be an array of suggestions of simple tasks you could accomplish in 2 minutes
+    </script>
+</body>
+
+</html>
